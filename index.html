@@ -2,162 +2,138 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BOTANIST PRO - V8.0</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <title>MT. RAW | Koleksiyon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --ana: #0a3d1d; --vurgu: #2e7d32; --arka: #f4f7f4; --beyaz: #ffffff; }
+        * { -webkit-tap-highlight-color: transparent; outline: none; }
+        body { margin: 0; font-family: 'Montserrat', sans-serif; background-color: #fcfcfc; min-height: 100vh; color: #333; }
+        
+        #intro-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; animation: fadeOut 1s forwards 3s; }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+        
+        .typewriter { font-size: 28px; font-weight: 700; overflow: hidden; border-right: 3px solid #333; white-space: nowrap; margin: 0 auto; letter-spacing: 2px; animation: typing 2.5s steps(20, end), blink-caret .75s step-end infinite; }
+        @keyframes typing { from { width: 0 } to { width: 13ch } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #333 } }
+        
+        #header-main { display: none; position: fixed; top: 0; width: 100%; background: #ffffff; padding: 10px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); z-index: 1000; box-sizing: border-box; }
+        .header-top { display: flex; align-items: center; justify-content: space-between; }
+        .logo-nav img { height: 35px; }
+        .search-box { padding: 8px; width: 120px; border-radius: 20px; border: 1px solid #eee; background: #f9f9f9; }
+        .nav-right { text-align: center; cursor: pointer; }
+        .qr-box { width: 30px; height: 30px; background: #fff; border: 1px solid #ddd; margin: 0 auto; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
+        .contact-text { font-size: 7px; font-weight: bold; margin-top: 2px; color: #888; }
+        
+        /* BEĞENDİKLERİM ARTIK LİSTENİN İÇİNDE, HEADER'DAN BAĞIMSIZ */
+        #fav-bar { text-align: center; padding: 15px 0 10px 0; font-size: 14px; font-weight: 700; cursor: pointer; color: #333; }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; 
-            outline: none !important;
-            border: none;
-        }
+        #products { display: none; padding-top: 80px; padding-bottom: 20px; }
+        .list-container { display: flex; flex-direction: column; gap: 15px; padding: 0 15px; }
+        
+        .product-card { border: 1px solid #f0f0f0; border-radius: 16px; padding: 18px; display: flex; align-items: center; gap: 20px; background: #fff; }
+        .product-card img { width: 75px; height: 75px; border-radius: 10px; cursor: pointer; object-fit: cover; }
+        .details { flex-grow: 1; cursor: pointer; }
+        .details h3 { margin: 0; font-size: 16px; color: #222; font-weight: 700; }
+        .fiyat { font-size: 13px; color: #888; margin-top: 4px; }
+        
+        .kalp { font-size: 24px; cursor: pointer; color: #ddd; padding: 5px; }
+        .kalp.aktif { color: red; }
 
-        body { margin: 0; padding: 0; background: var(--arka); font-family: 'Montserrat', sans-serif; }
-
-        /* ÜST PANEL */
-        .ust-panel {
-            background: var(--beyaz); padding: 15px 20px;
-            display: flex; align-items: center;
-            border-bottom: 5px solid var(--ana);
-            position: sticky; top: 0; z-index: 1000;
-        }
-
-        .geri-ok {
-            font-size: 35px; cursor: pointer; color: var(--ana);
-            margin-right: 15px; display: none; line-height: 1;
-        }
-
-        .logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; color: var(--ana); }
-
-        /* KARTLAR */
-        .grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto;
-        }
-
-        .kart {
-            background: white; border-radius: 20px; overflow: hidden;
-            cursor: pointer; border: 1px solid #eee;
-        }
-
-        .kart img { width: 100%; height: 200px; object-fit: cover; background: #eee; }
-        .kart h3 { padding: 15px; text-align: center; color: var(--ana); margin: 0; }
-
-        /* DETAY */
-        #detay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 2000; overflow-y: auto;
-        }
-
-        .banner { width: 100%; height: 300px; object-fit: cover; }
-        .icerik { max-width: 700px; margin: 0 auto; padding: 25px 20px 150px 20px; }
-        .kutu { background: #f9fbf9; border-left: 6px solid var(--vurgu); padding: 20px; margin-bottom: 15px; border-radius: 10px; }
-
-        /* SES BUTONU - EN ALTA ÇİVİLİ */
-        .ses-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: white; padding: 20px; text-align: center;
-            border-top: 1px solid #eee; box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
-        }
-
-        .oku-btn {
-            background: var(--ana); color: white; 
-            padding: 18px 45px; border-radius: 50px; 
-            font-size: 18px; font-weight: bold; cursor: pointer;
-        }
+        #fav-sayfasi { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 6000; overflow-y: auto; padding-top: 20px; }
+        .geri-btn { padding: 15px; font-weight: bold; cursor: pointer; }
+        
+        #detay-sayfasi { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 5000; overflow-y: auto; }
+        .geri-btn-detay { position: absolute; top: 15px; left: 15px; padding: 6px 14px; border: 1px solid #ddd; border-radius: 20px; cursor: pointer; background: #fff; font-size: 10px; font-weight: 700; color: #555; }
+        .detay-img { width: 100%; height: 45vh; object-fit: contain; margin-top: 40px; }
+        .detay-yazi { padding: 0 20px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div class="ust-panel">
-        <div class="geri-ok" id="geri" onclick="kapat()">⬅</div>
-        <div class="logo">BOTANIST PRO</div>
-    </div>
+<div id="intro-screen"><div class="typewriter">HOŞ GELDİNİZ</div></div>
 
-    <div id="ana">
-        <div style="padding:20px; text-align:center;">
-            <input type="text" id="arama" placeholder="Ara..." style="width:90%; padding:15px; border-radius:30px; border:1px solid #ddd;">
-        </div>
-        <div class="grid" id="grid"></div>
-    </div>
+<div id="home" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+    <img src="https://i.hizliresim.com/df4n9zl.png" style="width:220px; margin-bottom:30px;">
+    <button style="padding: 12px 40px; background: #222; color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: bold; font-family: 'Montserrat';" onclick="girisYap()">DEVAM ET</button>
+</div>
 
-    <div id="detay">
-        <img id="dImg" class="banner">
-        <div class="icerik">
-            <h1 id="dBas" style="color:var(--ana); font-family:'Playfair Display';"></h1>
-            <div id="dYaz"></div>
-        </div>
-        <div class="ses-bar">
-            <button class="oku-btn" id="okuBtn">🔊 REHBERİ DİNLE</button>
+<div id="header-main">
+    <div class="header-top">
+        <div class="logo-nav"><img src="https://i.hizliresim.com/df4n9zl.png" alt="Logo"></div>
+        <input type="text" class="search-box" placeholder="Ara...">
+        <div class="nav-right" onclick="acQR()">
+            <div class="qr-box"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" style="width:100%"></div>
+            <div class="contact-text">BİZE ULAŞIN</div>
         </div>
     </div>
+</div>
+
+<!-- BEĞENDİKLERİM ARTIK BURADA, LİSTENİN EN BAŞINDA -->
+<div id="products">
+    <div id="fav-bar" onclick="acFav()">BEĞENDİKLERİM</div>
+    <div class="list-container" id="grid"></div>
+</div>
+
+<div id="fav-sayfasi">
+    <div class="geri-btn" onclick="this.parentElement.style.display='none'">← GERİ DÖN</div>
+    <div id="fav-liste" class="list-container"></div>
+</div>
+
+<div id="qr-modal" style="display:none; position:fixed; top:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:9999; align-items:center; justify-content:center;" onclick="this.style.display='none'">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" style="width:180px; padding:15px; border:1px solid #f0f0f0; background:white; border-radius:10px;">
+</div>
+
+<div id="detay-sayfasi">
+    <div class="geri-btn-detay" onclick="kapatDetay()">← GERİ</div>
+    <img id="d-img" class="detay-img" src="">
+    <div class="detay-yazi"><h1 id="d-isim"></h1><p id="d-aciklama"></p></div>
+</div>
 
 <script>
-    const meyveler = ["Elma", "Armut", "Ayva", "Muz", "Çilek", "Kiraz", "Vişne", "Erik", "Kayısı", "Şeftali", "Nektarin", "Üzüm", "İncir", "Nar", "Karpuz", "Kavun", "Portakal", "Mandalina", "Limon", "Greyfurt", "Turunç", "Lime", "Ananas", "Avokado", "Mango", "Papaya", "Hindistan Cevizi", "Ejder Meyvesi", "Kivi", "Yaban Mersini", "Ahududu", "Böğürtlen", "Frenk Üzümü", "Bektaşi Üzümü", "Kızılcık", "Hünnap", "Muşmula", "Yenidünya", "Trabzon Hurması", "İğde", "Dut", "Karadut", "Goji Berry", "Çarkıfelek", "Guava", "Litchi", "Rambutan", "Mangosten", "Durian", "Yıldız Meyvesi", "Jackfruit", "Ekmek Ağacı", "Tamarillo", "Feijoa", "Nashi", "Physalis", "Pepino", "Kudret Narı", "Demirhindi", "Pomelo", "Kumkuat", "Bergamot", "Salak", "Açai", "Acerola", "Cherimoya", "Soursop", "Longan", "Noni", "Calamansi", "Santol", "Marula", "Baobab", "Cempedak", "Mucize Meyve", "Jujube", "Medlar", "Quince", "Bilberry", "Elderberry", "Cloudberry", "Boysenberry", "Loganberry", "Mulberry", "Star Apple", "Sapodilla", "Mamey Sapote", "Cupuaçu", "Jabuticaba", "Surinam Kirazı", "Kaju Elması", "Ackee", "Sloe", "Damson", "Rose Apple", "Jambolan", "Bael", "Wood Apple", "Custard Apple", "Sugar Apple", "Persimmon", "Pomegranate", "Hurma", "Frenk İnciri", "Tuna", "Boynuzlu Kavun", "Ugli Fruit", "Tangelo", "Satsuma", "Budha Eli", "Finger Lime", "Yuzu", "Sudachi", "Clementine", "Sweetie", "Jostaberry", "Marionberry", "Dewberry", "Salmonberry", "Thimbleberry", "Wineberry", "Hackberry", "Çırçan", "Rowanberry", "Serviceberry", "Huckleberry", "Buffalo Berry", "Chokeberry", "Aronya"];
+    const sesler = ["https://actions.google.com/sounds/v1/ui/click.ogg", "https://actions.google.com/sounds/v1/ui/button_toggle.ogg"];
+    let favoriler = [];
 
-    const grid = document.getElementById('grid');
-    let metin = "";
-
-    // SES MOTORUNU GÜVENLİ BAŞLATMA
-    function getSynth() {
-        return window.speechSynthesis || null;
+    function girisYap() {
+        document.getElementById('home').style.display = 'none';
+        document.getElementById('header-main').style.display = 'block';
+        document.getElementById('products').style.display = 'block';
+        let grid = document.getElementById('grid');
+        for(let i=1; i<=40; i++) {
+            grid.innerHTML += `
+                <div class="product-card" id="card-${i}">
+                    <img src="https://i.hizliresim.com/77hh2j4.png" onclick="acDetay(${i})">
+                    <div class="details" onclick="acDetay(${i})"><h3>MT. RAW No:${i}</h3><div class="fiyat">1.250 TL</div></div>
+                    <div class="kalp" id="k-${i}" onclick="favla(${i})">♥</div>
+                </div>`;
+        }
     }
-
-    function listele(f = "") {
-        grid.innerHTML = "";
-        meyveler.filter(m => m.toLowerCase().includes(f.toLowerCase())).forEach(m => {
-            const k = document.createElement('div');
-            k.className = 'kart';
-            const yol = `img/${m.toLowerCase()}.jpg`;
-            k.innerHTML = `<img src="${yol}" onerror="this.src='https://source.unsplash.com/400x300/?${m},fruit'"><h3>${m}</h3>`;
-            k.onclick = () => ac(m, yol);
-            grid.appendChild(k);
+    function favla(i) {
+        let el = document.getElementById('k-'+i);
+        el.classList.toggle('aktif');
+        if(el.classList.contains('aktif')) favoriler.push(i);
+        else favoriler = favoriler.filter(id => id !== i);
+    }
+    function acFav() {
+        let liste = document.getElementById('fav-liste');
+        liste.innerHTML = "";
+        favoriler.forEach(i => {
+            liste.innerHTML += `
+                <div class="product-card">
+                    <img src="https://i.hizliresim.com/77hh2j4.png" onclick="acDetay(${i})">
+                    <div class="details" onclick="acDetay(${i})"><h3>MT. RAW No:${i}</h3><div class="fiyat">1.250 TL</div></div>
+                </div>`;
         });
+        document.getElementById('fav-sayfasi').style.display = 'block';
     }
-
-    function ac(n, i) {
-        document.getElementById('dImg').src = i;
-        document.getElementById('dBas').innerText = n;
-        const h = `<div class="kutu"><b>🌿 BOTANİK:</b><p>${n} hakkında uzman yetiştirme bilgileri burada yer alır.</p></div>
-                   <div class="kutu"><b>📅 HASAT:</b><p>En uygun meyve kalitesi için mevsiminde toplanmalıdır.</p></div>`;
-        document.getElementById('dYaz').innerHTML = h;
-        metin = h.replace(/<[^>]*>/g, '');
-        
-        document.getElementById('detay').style.display = "block";
-        document.getElementById('geri').style.display = "block";
-        window.scrollTo(0,0);
-        
-        // KRİTİK: İlk tıklamada ses motorunu sessizce uyandırıyoruz (Kilit Kırıcı)
-        let s = getSynth();
-        if(s) s.cancel();
+    function acDetay(i) {
+        new Audio(sesler[i % 2]).play();
+        document.getElementById('d-isim').innerText = "MT. RAW No:" + i;
+        document.getElementById('d-aciklama').innerText = "MT. RAW fabrikasından özel notalar.";
+        document.getElementById('d-img').src = "https://i.hizliresim.com/77hh2j4.png";
+        document.getElementById('detay-sayfasi').style.display = 'block';
     }
-
-    function kapat() {
-        document.getElementById('detay').style.display = "none";
-        document.getElementById('geri').style.display = "none";
-        let s = getSynth();
-        if(s) s.cancel();
-    }
-
-    document.getElementById('okuBtn').onclick = () => {
-        let s = getSynth();
-        if (!s) return;
-        
-        s.cancel(); // Önce temizle
-        
-        const u = new SpeechSynthesisUtterance(metin);
-        u.lang = 'tr-TR';
-        u.rate = 1.0;
-        
-        // Bazı tarayıcılarda sesin yüklenmesi için 100ms bekletiyoruz
-        setTimeout(() => { s.speak(u); }, 100);
-    };
-
-    document.getElementById('arama').oninput = (e) => listele(e.target.value);
-    listele();
+    function kapatDetay() { document.getElementById('detay-sayfasi').style.display = 'none'; }
+    function acQR() { document.getElementById('qr-modal').style.display = 'flex'; }
 </script>
 </body>
-</html>
+    </html>
+    
